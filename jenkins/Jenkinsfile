@@ -1,14 +1,18 @@
 pipeline {
+
     agent {
-        docker {
-            image 'node:lts-buster-slim'
-            args '-p 3000:3000'
+
+        stages {
+        stage('Build11111') {
+            steps {
+                sh 'docker pull node:lts-buster-slim'
+                sh 'docker run -d -p 3000:3000 --name my-docker node:lts-buster-slim'
+            }
         }
-    }
     environment {
         CI = 'true'
     }
-    stages {
+
         stage('Build') {
             steps {
                 sh 'npm install'
@@ -27,4 +31,6 @@ pipeline {
             }
         }
     }
+    }
 }
+
