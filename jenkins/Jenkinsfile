@@ -1,37 +1,34 @@
 pipeline {
 
-    agent {
+    agent any
 
         stages {
-        stage('Build11111') {
+                
+            stage('Build11111') {
+                
+                steps {
+                    sh 'docker pull node:lts-buster-slim'
+                    sh 'docker run -d -p 3000:3000 --name my-docker node:lts-buster-slim'
+                }
+            }
+
+        stage('Build') {
             steps {
-                sh 'sudo apt install docker.io -y'
-                sh 'sudo docker pull node:lts-buster-slim'
-                sh 'sudo docker run -d -p 3000:3000 --name my-docker node:lts-buster-slim'
+                sh 'npm install'
             }
         }
-    // environment {
-    //     CI = 'true'
-    // }
-
-    //     stage('Build') {
-    //         steps {
-    //             sh 'npm install'
-    //         }
-    //     }
-    //     stage('Test') {
-    //         steps {
-    //             sh './jenkins/scripts/test.sh'
-    //         }
-    //     }
-    //     stage('Deliver') {
-    //         steps {
-    //             sh './jenkins/scripts/deliver.sh'
-    //             input message: 'Finished using the web site? (Click "Proceed" to continue)'
-    //             sh './jenkins/scripts/kill.sh'
-    //         }
-    //     }
-    }
+        stage('Test') {
+            steps {
+                sh './jenkins/scripts/test.sh'
+            }
+        }
+        stage('Deliver') {
+            steps {
+                sh './jenkins/scripts/deliver.sh'
+                input message: 'Finished using the web site? (Click "Proceed" to continue)'
+                sh './jenkins/scripts/kill.sh'
+            }
+        }
     }
 }
 
